@@ -24,7 +24,7 @@ namespace PC_to_Arduino_wifi
             sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             serverAddr = IPAddress.Parse("192.168.0.131");
             endPoint = new IPEndPoint(serverAddr, 2390);
-            //comment
+            //comment Jochem was hier
 
         }
 
