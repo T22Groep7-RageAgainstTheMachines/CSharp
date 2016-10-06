@@ -30,6 +30,7 @@
         {
             this.buttonSend = new System.Windows.Forms.Button();
             this.textBoxTextToSend = new System.Windows.Forms.TextBox();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // buttonSend
@@ -49,6 +50,12 @@
             this.textBoxTextToSend.Name = "textBoxTextToSend";
             this.textBoxTextToSend.Size = new System.Drawing.Size(260, 68);
             this.textBoxTextToSend.TabIndex = 1;
+            this.textBoxTextToSend.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxTextToSend_KeyDown);
+            this.textBoxTextToSend.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxTextToSend_KeyUp);
+            // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork_1);
             // 
             // Form1
             // 
@@ -59,6 +66,8 @@
             this.Controls.Add(this.buttonSend);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -68,6 +77,7 @@
 
         private System.Windows.Forms.Button buttonSend;
         private System.Windows.Forms.TextBox textBoxTextToSend;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 
