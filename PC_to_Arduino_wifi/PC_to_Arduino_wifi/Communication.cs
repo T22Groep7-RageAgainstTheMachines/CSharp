@@ -11,8 +11,6 @@ namespace PC_to_Arduino_wifi
 {
     class Communication
     {
-
-
         private Socket sock;
         private IPAddress serverAddr;
         private IPEndPoint endPoint;

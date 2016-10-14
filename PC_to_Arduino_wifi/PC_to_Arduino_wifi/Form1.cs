@@ -10,6 +10,13 @@ using System.Windows.Forms;
 using System.Net.Sockets;
 using System.Net;
 using System.Runtime.InteropServices;
+using MonoGame;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Storage;
+using Microsoft.Xna.Framework.Utilities;
 
 namespace PC_to_Arduino_wifi
 {
@@ -125,7 +132,6 @@ namespace PC_to_Arduino_wifi
             {
                 com.SendData("Stop");
             }
-
         }
 
 
