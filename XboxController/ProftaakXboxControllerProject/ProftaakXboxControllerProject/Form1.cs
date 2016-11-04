@@ -19,7 +19,7 @@ namespace ProftaakXboxControllerProject
         string lastMessageSent;
         Client bbc;
         bool gameStarted;
-		UdpClient receivingUdpClient;
+        UdpClient receivingUdpClient;
 
 
         public Form1()
@@ -28,13 +28,13 @@ namespace ProftaakXboxControllerProject
             sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             serverAddr = IPAddress.Parse("192.168.137.123");
             endPoint = new IPEndPoint(serverAddr, 2390);
-            bbc = new Client(7, "192.167.172.1", 5000);
+            bbc = new Client(7, "192.168.137.1", 5000);
             bbc.GameStarted += Bbc_GameStarted;
             bbc.GamePaused += Bbc_GamePaused;
             bbc.GameStopped += Bbc_GameStopped;
             gameStarted = false;
             lastMessageSent = string.Empty;
-			receivingUdpClient = new UdpClient(11000);
+            //receivingUdpClient = new UdpClient(11000);
         }
 
         private void Bbc_GameStopped(object sender, EventArgs e)
@@ -103,6 +103,17 @@ namespace ProftaakXboxControllerProject
             {
                 dataToSend = "ATTACK";
             }
+            //hit target simulator
+            if (controller.DPad.Left == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+            {
+                bbc.HitSomeone();
+            }
+
+            //got hit simulator
+            if (controller.DPad.Right == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+            {
+                bbc.GotHit();
+            }
             label3.Text = dataToSend;
             if (string.IsNullOrWhiteSpace(dataToSend))
             {
@@ -111,7 +122,13 @@ namespace ProftaakXboxControllerProject
             if (dataToSend != lastMessageSent && gameStarted)
             {
                 sendMessage(dataToSend);
+                System.Console.WriteLine("sending data");
                 lastMessageSent = dataToSend;
+            }
+            else
+            {
+                System.Console.WriteLine("NOT    sending data");
+
             }
         }
 
@@ -127,7 +144,7 @@ namespace ProftaakXboxControllerProject
         {
 
             GenerateDataForTransfer();
-          //  receiveMessage();
+            //receiveMessage();
         }
 
         private void button1_Click(object sender, EventArgs e)
