@@ -1,21 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using MonoGame;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Storage;
-using Microsoft.Xna.Framework.Utilities;
 using System.Net.Sockets;
 using System.Net;
+using BattleBotClient;
 
 
 namespace ProftaakXboxControllerProject
@@ -27,13 +17,40 @@ namespace ProftaakXboxControllerProject
         private IPEndPoint endPoint;
         private byte[] send_buffer;
         string lastMessageSent;
+        Client bbc;
+        bool gameStarted;
+
         public Form1()
         {
             InitializeComponent();
             sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             serverAddr = IPAddress.Parse("192.168.1.101");
             endPoint = new IPEndPoint(serverAddr, 2390);
+            bbc = new Client(7, "192.167.172.1", 5000);
+            bbc.GameStarted += Bbc_GameStarted;
+            bbc.GamePaused += Bbc_GamePaused;
+            bbc.GameStopped += Bbc_GameStopped;
+            gameStarted = false;
+            lastMessageSent = string.Empty;
         }
+
+        private void Bbc_GameStopped(object sender, EventArgs e)
+        {
+            gameStarted = false;
+            sendMessage("STOP");
+        }
+
+        private void Bbc_GamePaused(object sender, EventArgs e)
+        {
+            gameStarted = false;
+            sendMessage("STOP");
+        }
+
+        private void Bbc_GameStarted(object sender, EventArgs e)
+        {
+            gameStarted = true;
+        }
+
         private void GenerateDataForTransfer()
         {
             /*protocol
@@ -84,10 +101,10 @@ namespace ProftaakXboxControllerProject
             {
                 return;
             }
-            if (dataToSend != lastMessageSent)
+            if (dataToSend != lastMessageSent && gameStarted)
             {
-                send_buffer = Encoding.ASCII.GetBytes(dataToSend);
-                sock.SendTo(send_buffer, endPoint);
+                sendMessage(dataToSend);
+                lastMessageSent = dataToSend;
             }
         }
 
@@ -101,6 +118,7 @@ namespace ProftaakXboxControllerProject
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+
             GenerateDataForTransfer();
         }
 
