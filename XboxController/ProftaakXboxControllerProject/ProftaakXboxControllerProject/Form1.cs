@@ -27,12 +27,16 @@ namespace ProftaakXboxControllerProject
         private IPEndPoint endPoint;
         private byte[] send_buffer;
         string lastMessageSent;
+
+        UdpClient receivingUdpClient;
         public Form1()
         {
             InitializeComponent();
             sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            serverAddr = IPAddress.Parse("192.168.1.101");
+            serverAddr = IPAddress.Parse("192.168.137.123");
             endPoint = new IPEndPoint(serverAddr, 2390);
+
+            receivingUdpClient = new UdpClient(11000);
         }
         private void GenerateDataForTransfer()
         {
@@ -79,6 +83,10 @@ namespace ProftaakXboxControllerProject
             {
                 dataToSend = "STOP";
             }
+            if (controller.Buttons.X == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+            {
+                dataToSend = "ATTACK";
+            }
             label3.Text = dataToSend;
             if (string.IsNullOrWhiteSpace(dataToSend))
             {
@@ -102,6 +110,7 @@ namespace ProftaakXboxControllerProject
         private void timer1_Tick(object sender, EventArgs e)
         {
             GenerateDataForTransfer();
+          //  receiveMessage();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -117,6 +126,21 @@ namespace ProftaakXboxControllerProject
         {
             send_buffer = Encoding.ASCII.GetBytes(message);
             sock.SendTo(send_buffer, endPoint);
+        }
+        private void receiveMessage()
+        {
+            IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
+            try
+            {
+                // Blocks until a message returns on this socket from a remote host.
+                Byte[] receiveBytes = receivingUdpClient.Receive(ref RemoteIpEndPoint);
+                string receivedData = receiveBytes.ToString();
+                MessageBox.Show(receivedData);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
     }
 }
