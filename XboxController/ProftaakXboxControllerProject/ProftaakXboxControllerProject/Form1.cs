@@ -32,7 +32,7 @@ namespace ProftaakXboxControllerProject
             bbc.GameStarted += Bbc_GameStarted;
             bbc.GamePaused += Bbc_GamePaused;
             bbc.GameStopped += Bbc_GameStopped;
-            gameStarted = false;
+            gameStarted = true;
             lastMessageSent = string.Empty;
             //receivingUdpClient = new UdpClient(11000);
         }
@@ -61,7 +61,7 @@ namespace ProftaakXboxControllerProject
              * als er een trigger ingedrukt is wordt het <kant L of R + R (Rotate)>
              * als Y knop wordt ingedruk verwisseld de richting <CD> change direction
              * als de B knop wordt ingedruk stopt de RP6 <STOP>
-            */
+             */
             string dataToSend = "";
             GamePadState controller = GamePad.GetState(PlayerIndex.One);
             int LeftThumbStick = Convert.ToInt32(controller.ThumbSticks.Left.Y * 100);
@@ -106,12 +106,14 @@ namespace ProftaakXboxControllerProject
             //hit target simulator
             if (controller.DPad.Left == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
+                Console.WriteLine("hit someone");
                 bbc.HitSomeone();
             }
 
             //got hit simulator
             if (controller.DPad.Right == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
+                Console.WriteLine("got hit");
                 bbc.GotHit();
             }
             label3.Text = dataToSend;
