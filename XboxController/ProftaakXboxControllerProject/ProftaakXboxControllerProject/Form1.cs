@@ -19,12 +19,14 @@ namespace ProftaakXboxControllerProject
         string lastMessageSent;
         Client bbc;
         bool gameStarted;
+		UdpClient receivingUdpClient;
+
 
         public Form1()
         {
             InitializeComponent();
             sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            serverAddr = IPAddress.Parse("192.168.1.101");
+            serverAddr = IPAddress.Parse("192.168.137.123");
             endPoint = new IPEndPoint(serverAddr, 2390);
             bbc = new Client(7, "192.167.172.1", 5000);
             bbc.GameStarted += Bbc_GameStarted;
@@ -32,6 +34,7 @@ namespace ProftaakXboxControllerProject
             bbc.GameStopped += Bbc_GameStopped;
             gameStarted = false;
             lastMessageSent = string.Empty;
+			receivingUdpClient = new UdpClient(11000);
         }
 
         private void Bbc_GameStopped(object sender, EventArgs e)
@@ -96,6 +99,10 @@ namespace ProftaakXboxControllerProject
             {
                 dataToSend = "STOP";
             }
+            if (controller.Buttons.X == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+            {
+                dataToSend = "ATTACK";
+            }
             label3.Text = dataToSend;
             if (string.IsNullOrWhiteSpace(dataToSend))
             {
@@ -120,6 +127,7 @@ namespace ProftaakXboxControllerProject
         {
 
             GenerateDataForTransfer();
+          //  receiveMessage();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -135,6 +143,21 @@ namespace ProftaakXboxControllerProject
         {
             send_buffer = Encoding.ASCII.GetBytes(message);
             sock.SendTo(send_buffer, endPoint);
+        }
+        private void receiveMessage()
+        {
+            IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
+            try
+            {
+                // Blocks until a message returns on this socket from a remote host.
+                Byte[] receiveBytes = receivingUdpClient.Receive(ref RemoteIpEndPoint);
+                string receivedData = receiveBytes.ToString();
+                MessageBox.Show(receivedData);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
     }
 }
