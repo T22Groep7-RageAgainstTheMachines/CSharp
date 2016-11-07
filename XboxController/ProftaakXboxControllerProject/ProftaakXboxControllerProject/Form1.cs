@@ -80,6 +80,10 @@ namespace ProftaakXboxControllerProject
             {
                 dataToSend = "MR";
             }
+            else if (RightThumbStick < 0)
+            {
+                dataToSend = "ML";
+            }
             if (RightTrigger > 50 || LeftTrigger > 50)
             {
                 if (RightTrigger > LeftTrigger)
@@ -123,7 +127,7 @@ namespace ProftaakXboxControllerProject
             }
             if (dataToSend != lastMessageSent && gameStarted)
             {
-                sendMessage(dataToSend);
+                sendMessage("%" + dataToSend + "#");
                 System.Console.WriteLine("sending data");
                 lastMessageSent = dataToSend;
             }
