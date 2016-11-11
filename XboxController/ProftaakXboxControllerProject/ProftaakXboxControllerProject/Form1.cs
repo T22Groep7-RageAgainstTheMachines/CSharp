@@ -13,8 +13,8 @@ namespace ProftaakXboxControllerProject
     public partial class Form1 : Form
     {
         //UDP messages from Arduino
-         
-        
+        private CommRecUDPFromArduino ArduinoReceiver;
+        //
         private Socket sock;
         private IPAddress serverAddr;
         private IPEndPoint endPoint;
@@ -25,6 +25,7 @@ namespace ProftaakXboxControllerProject
         public Form1()
         {
             InitializeComponent();
+            ArduinoReceiver = new CommRecUDPFromArduino();
             sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             serverAddr = IPAddress.Parse("192.168.137.123");
             endPoint = new IPEndPoint(serverAddr, 2390);
@@ -55,12 +56,6 @@ namespace ProftaakXboxControllerProject
 
         private void GenerateDataForTransfer()
         {
-            /*protocol
-             * <kant L><richting F of B><#><value 0-255><%><kant R><richting F of B><#><value 0-255><%>
-             * als er een trigger ingedrukt is wordt het <kant L of R + R (Rotate)>
-             * als Y knop wordt ingedruk verwisseld de richting <CD> change direction
-             * als de B knop wordt ingedruk stopt de RP6 <STOP>
-             */
             string dataToSend = "";
             GamePadState controller = GamePad.GetState(PlayerIndex.One);
             int LeftThumbStick = Convert.ToInt32(controller.ThumbSticks.Left.Y * 100);
@@ -148,6 +143,7 @@ namespace ProftaakXboxControllerProject
         {
 
             GenerateDataForTransfer();
+            ArduinoReceiver.ReceiveUDPmessageFromArduino();
         }
 
         private void button1_Click(object sender, EventArgs e)
