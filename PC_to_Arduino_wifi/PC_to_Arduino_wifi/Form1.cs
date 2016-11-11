@@ -18,12 +18,14 @@ namespace PC_to_Arduino_wifi
         [DllImport("user32.dll")]
         public static extern short GetAsyncKeyState(Keys vKey);
         Communication com;
+        CommunicationReceiveFromArduino arduinoCom;
         int keysdown;
 
         public Form1()
         {
             InitializeComponent();
             com = new Communication();
+            arduinoCom = new CommunicationReceiveFromArduino();
             keysdown = 0;
             this.ActiveControl = textBoxTextToSend;
         }
