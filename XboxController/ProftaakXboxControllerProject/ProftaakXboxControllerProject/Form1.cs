@@ -12,6 +12,9 @@ namespace ProftaakXboxControllerProject
 {
     public partial class Form1 : Form
     {
+        //UDP messages from Arduino
+         
+        
         private Socket sock;
         private IPAddress serverAddr;
         private IPEndPoint endPoint;
@@ -19,9 +22,6 @@ namespace ProftaakXboxControllerProject
         string lastMessageSent;
         Client bbc;
         bool gameStarted;
-        UdpClient receivingUdpClient;
-
-
         public Form1()
         {
             InitializeComponent();
@@ -34,7 +34,6 @@ namespace ProftaakXboxControllerProject
             bbc.GameStopped += Bbc_GameStopped;
             gameStarted = true;
             lastMessageSent = string.Empty;
-            //receivingUdpClient = new UdpClient(11000);
         }
 
         private void Bbc_GameStopped(object sender, EventArgs e)
@@ -113,7 +112,6 @@ namespace ProftaakXboxControllerProject
                 Console.WriteLine("hit someone");
                 bbc.HitSomeone();
             }
-
             //got hit simulator
             if (controller.DPad.Right == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
@@ -150,7 +148,6 @@ namespace ProftaakXboxControllerProject
         {
 
             GenerateDataForTransfer();
-            //receiveMessage();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -166,21 +163,6 @@ namespace ProftaakXboxControllerProject
         {
             send_buffer = Encoding.ASCII.GetBytes(message);
             sock.SendTo(send_buffer, endPoint);
-        }
-        private void receiveMessage()
-        {
-            IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
-            try
-            {
-                // Blocks until a message returns on this socket from a remote host.
-                Byte[] receiveBytes = receivingUdpClient.Receive(ref RemoteIpEndPoint);
-                string receivedData = receiveBytes.ToString();
-                MessageBox.Show(receivedData);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
         }
     }
 }
