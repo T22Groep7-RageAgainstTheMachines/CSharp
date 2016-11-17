@@ -151,7 +151,7 @@ namespace ProftaakXboxControllerProject
         {
 
             GenerateDataForTransfer();
-            //ArduinoReceiver.ReceiveUDPmessageFromArduino();
+            ArduinoReceiver.ReceiveUDPmessageFromArduino();
         }
 
         private void button1_Click(object sender, EventArgs e)

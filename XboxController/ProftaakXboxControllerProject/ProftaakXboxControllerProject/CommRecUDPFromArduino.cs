@@ -22,23 +22,27 @@ namespace ProftaakXboxControllerProject
             ArduinoIPAddress = new IPAddress(ArduinoIPAdressBytes);
             IPendpoitForArduino = new IPEndPoint(ArduinoIPAddress, portnumber);
         }
+
         public string ReceiveUDPmessageFromArduino()
         {
             string receivedData = "";
             IPEndPoint endpoint = IPendpoitForArduino;
             try
             {
-                byte[] receiveBytes = UDPclient.Receive(ref endpoint);
-                string returnData = Encoding.ASCII.GetString(receiveBytes);
-                receivedData = returnData;
-
+                if (UDPclient.Available > 0)
+                {
+                    byte[] receiveBytes = UDPclient.Receive(ref endpoint);
+                    string returnData = Encoding.ASCII.GetString(receiveBytes);
+                    receivedData = returnData;
+                    Console.WriteLine(receivedData);
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
             }
-            Console.WriteLine(receivedData);
             return receivedData;
+
         }
     }
 }
