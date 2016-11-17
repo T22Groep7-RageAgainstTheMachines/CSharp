@@ -16,7 +16,7 @@ namespace ProftaakXboxControllerProject
         private CommRecUDPFromArduino ArduinoReceiver;
         //
         private Socket sock;
-        private IPAddress serverAddr;
+        private IPAddress arduinoAddr;
         private IPEndPoint endPoint;
         private byte[] send_buffer;
         string lastMessageSent;
@@ -27,12 +27,20 @@ namespace ProftaakXboxControllerProject
             InitializeComponent();
             ArduinoReceiver = new CommRecUDPFromArduino();
             sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            serverAddr = IPAddress.Parse("192.168.137.123");
-            endPoint = new IPEndPoint(serverAddr, 2390);
-            bbc = new Client(7, "192.168.137.1", 5000);
-            bbc.GameStarted += Bbc_GameStarted;
-            bbc.GamePaused += Bbc_GamePaused;
-            bbc.GameStopped += Bbc_GameStopped;
+            arduinoAddr = IPAddress.Parse("192.168.137.123");
+            endPoint = new IPEndPoint(arduinoAddr, 2390);
+           /* try
+            {
+                bbc = new Client(7, "192.168.137.1", 5000);
+                bbc.GameStarted += Bbc_GameStarted;
+                bbc.GamePaused += Bbc_GamePaused;
+                bbc.GameStopped += Bbc_GameStopped;
+
+            }
+            catch (SocketException socketException)
+            {
+                Console.WriteLine(socketException.Message);
+            }*/
             gameStarted = true;
             lastMessageSent = string.Empty;
         }

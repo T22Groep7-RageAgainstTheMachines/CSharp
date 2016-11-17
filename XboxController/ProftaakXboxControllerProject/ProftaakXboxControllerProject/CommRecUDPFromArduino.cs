@@ -17,7 +17,7 @@ namespace ProftaakXboxControllerProject
 
         public CommRecUDPFromArduino()
         {
-            byte[] ArduinoIPAdressBytes = { 192, 168, 1, 162 };
+            byte[] ArduinoIPAdressBytes = { 192, 168, 137, 123 };
             UDPclient = new UdpClient(portnumber);
             ArduinoIPAddress = new IPAddress(ArduinoIPAdressBytes);
             IPendpoitForArduino = new IPEndPoint(ArduinoIPAddress, portnumber);
@@ -28,8 +28,7 @@ namespace ProftaakXboxControllerProject
             IPEndPoint endpoint = IPendpoitForArduino;
             try
             {
-                // Blocks until a message returns on this socket from a remote host.
-                Byte[] receiveBytes = UDPclient.Receive(ref endpoint);
+                byte[] receiveBytes = UDPclient.Receive(ref endpoint);
                 string returnData = Encoding.ASCII.GetString(receiveBytes);
                 receivedData = returnData;
 
