@@ -126,11 +126,11 @@ namespace ProftaakXboxControllerProject
             {
                 return;
             }
-            if (dataToSend != lastMessageSent && gameStarted)
+            if (dataToSend != lastMessageSent /*&& gameStarted*/)
             {
                 sendMessage("%" + dataToSend + "#");
-                System.Console.WriteLine("sending data");
-                lastMessageSent = dataToSend;
+                System.Console.WriteLine("sending data" + dataToSend);
+                //lastMessageSent = dataToSend;
             }
             else
             {
