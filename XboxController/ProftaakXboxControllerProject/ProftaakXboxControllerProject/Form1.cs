@@ -29,18 +29,18 @@ namespace ProftaakXboxControllerProject
             sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             arduinoAddr = IPAddress.Parse("192.168.137.123");
             endPoint = new IPEndPoint(arduinoAddr, 2390);
-           /* try
-            {
-                bbc = new Client(7, "192.168.137.1", 5000);
-                bbc.GameStarted += Bbc_GameStarted;
-                bbc.GamePaused += Bbc_GamePaused;
-                bbc.GameStopped += Bbc_GameStopped;
+            /* try
+             {
+                 bbc = new Client(7, "192.168.137.1", 5000);
+                 bbc.GameStarted += Bbc_GameStarted;
+                 bbc.GamePaused += Bbc_GamePaused;
+                 bbc.GameStopped += Bbc_GameStopped;
 
-            }
-            catch (SocketException socketException)
-            {
-                Console.WriteLine(socketException.Message);
-            }*/
+             }
+             catch (SocketException socketException)
+             {
+                 Console.WriteLine(socketException.Message);
+             }*/
             gameStarted = true;
             lastMessageSent = string.Empty;
         }
@@ -66,17 +66,26 @@ namespace ProftaakXboxControllerProject
         {
             string dataToSend = "";
             GamePadState controller = GamePad.GetState(PlayerIndex.One);
-            int LeftThumbStick = Convert.ToInt32(controller.ThumbSticks.Left.Y * 100);
+            int LeftThumbStickY = Convert.ToInt32(controller.ThumbSticks.Left.Y * 100);
+            int LeftThumbStickX = Convert.ToInt32(controller.ThumbSticks.Left.X * 100);
             int RightThumbStick = Convert.ToInt32(controller.ThumbSticks.Right.X * 100);
             int LeftTrigger = Convert.ToInt32(controller.Triggers.Left * 100);
             int RightTrigger = Convert.ToInt32(controller.Triggers.Right * 100);
-            if (LeftThumbStick > 0)
+            if (LeftThumbStickY > 0)
             {
                 dataToSend = "MF";
             }
-            else if (LeftThumbStick < 0)
+            else if (LeftThumbStickY < 0)
             {
                 dataToSend = "MB";
+            }
+            else if (LeftThumbStickY < 0)
+            {
+                dataToSend = "ML";
+            }
+            else if (LeftThumbStickY > 0)
+            {
+                dataToSend = "MR";
             }
             else if (RightThumbStick > 0)
             {
