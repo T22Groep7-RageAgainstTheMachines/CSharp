@@ -17,7 +17,7 @@ namespace ProftaakXboxControllerProject
 
         public CommRecUDPFromArduino()
         {
-            byte[] ArduinoIPAdressBytes = { 192, 168, 137, 123 };
+            byte[] ArduinoIPAdressBytes = { 192, 168, 1, 252 };
             UDPclient = new UdpClient(portnumber);
             ArduinoIPAddress = new IPAddress(ArduinoIPAdressBytes);
             IPendpoitForArduino = new IPEndPoint(ArduinoIPAddress, portnumber);
