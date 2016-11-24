@@ -27,7 +27,7 @@ namespace ProftaakXboxControllerProject
             InitializeComponent();
             ArduinoReceiver = new CommRecUDPFromArduino();
             sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            arduinoAddr = IPAddress.Parse("192.168.137.123");
+            arduinoAddr = IPAddress.Parse("192.168.1.252");
             endPoint = new IPEndPoint(arduinoAddr, 2390);
             /* try
              {
