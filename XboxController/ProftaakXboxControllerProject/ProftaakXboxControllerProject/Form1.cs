@@ -5,8 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.Net.Sockets;
 using System.Net;
-using BattleBotClient;
-
+using Client;
 
 namespace ProftaakXboxControllerProject
 {
@@ -20,7 +19,6 @@ namespace ProftaakXboxControllerProject
         private IPEndPoint endPoint;
         private byte[] send_buffer;
         string lastMessageSent;
-        Client bbc;
         bool gameStarted;
         public Form1()
         {
@@ -29,18 +27,18 @@ namespace ProftaakXboxControllerProject
             sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             arduinoAddr = IPAddress.Parse("192.168.1.252");
             endPoint = new IPEndPoint(arduinoAddr, 2390);
-            /* try
+             try
              {
-                 bbc = new Client(7, "192.168.137.1", 5000);
-                 bbc.GameStarted += Bbc_GameStarted;
-                 bbc.GamePaused += Bbc_GamePaused;
-                 bbc.GameStopped += Bbc_GameStopped;
+            Client.Client.Connect("PC7", "192.168.137.1", 5000);
+                Client.Client.GameStarted += Bbc_GameStarted;
+                 Client.Client.GamePaused += Bbc_GamePaused;
+                 Client.Client.GameStopped += Bbc_GameStopped;
 
              }
              catch (SocketException socketException)
              {
                  Console.WriteLine(socketException.Message);
-             }*/
+             }
             gameStarted = true;
             lastMessageSent = string.Empty;
         }
@@ -122,20 +120,20 @@ namespace ProftaakXboxControllerProject
             if (controller.DPad.Left == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
                 Console.WriteLine("hit someone");
-                bbc.HitSomeone();
+                Client.Client.Punt();
             }
             //got hit simulator
             if (controller.DPad.Right == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
                 Console.WriteLine("got hit");
-                bbc.GotHit();
+                Client.Client.Hit();
             }
             label3.Text = dataToSend;
             if (string.IsNullOrWhiteSpace(dataToSend))
             {
                 return;
             }
-            if (dataToSend != lastMessageSent /*&& gameStarted*/)
+            if (dataToSend != lastMessageSent && gameStarted)
             {
                 sendMessage("%" + dataToSend + "#");
                 System.Console.WriteLine("sending data" + dataToSend);
