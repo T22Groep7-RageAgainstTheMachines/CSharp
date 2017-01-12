@@ -34,7 +34,7 @@ namespace ProftaakXboxControllerProject
                     byte[] receiveBytes = UDPclient.Receive(ref endpoint);
                     string returnData = Encoding.ASCII.GetString(receiveBytes);
                     receivedData = returnData;
-                    Console.WriteLine(receivedData);
+                    Console.WriteLine(receivedData);                   
                 }
             }
             catch (Exception e)

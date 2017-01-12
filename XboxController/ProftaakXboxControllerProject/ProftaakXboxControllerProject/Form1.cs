@@ -25,20 +25,20 @@ namespace ProftaakXboxControllerProject
             InitializeComponent();
             ArduinoReceiver = new CommRecUDPFromArduino();
             sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            arduinoAddr = IPAddress.Parse("192.168.1.252");
+            arduinoAddr = IPAddress.Parse("192.168.137.123");
             endPoint = new IPEndPoint(arduinoAddr, 2390);
-             try
-             {
-            Client.Client.Connect("PC7", "192.168.137.1", 5000);
+            try
+            {
+                Client.Client.Connect("PC7", "192.168.137.1", 5000);
                 Client.Client.GameStarted += Bbc_GameStarted;
-                 Client.Client.GamePaused += Bbc_GamePaused;
-                 Client.Client.GameStopped += Bbc_GameStopped;
+                Client.Client.GamePaused += Bbc_GamePaused;
+                Client.Client.GameStopped += Bbc_GameStopped;
 
-             }
-             catch (SocketException socketException)
-             {
-                 Console.WriteLine(socketException.Message);
-             }
+            }
+            catch (SocketException socketException)
+            {
+                Console.WriteLine(socketException.Message);
+            }
             gameStarted = true;
             lastMessageSent = string.Empty;
         }
@@ -158,7 +158,19 @@ namespace ProftaakXboxControllerProject
         {
 
             GenerateDataForTransfer();
-            ArduinoReceiver.ReceiveUDPmessageFromArduino();
+            string receivedData = ArduinoReceiver.ReceiveUDPmessageFromArduino();
+            if (!string.IsNullOrWhiteSpace(receivedData))
+            {
+                Console.WriteLine(receivedData);
+            }
+            if (receivedData.Contains("GotHit"))
+            {
+                Client.Client.Hit();
+            }
+            else if (receivedData.Contains("Hit"))
+            {
+                Client.Client.Punt();
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
